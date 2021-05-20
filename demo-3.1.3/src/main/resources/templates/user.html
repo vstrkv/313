@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User</title>
+    <meta charset="UTF-8">
+    <link th:href="@{/webjars/bootstrap/4.6.0-1/css/bootstrap.min.css}" rel="stylesheet">
+</head>
+<body>
+
+<div th:replace="header :: content"></div>
+
+
+<div class="container-fluid no-gutters">
+    <div class="row pr-0">
+        <div class="col-2 pr-0 pl-0">
+            <a type="button" class="btn btn-outline-primary btn-block text-left active" id="user" href="/user">
+                <span data-feather="file"></span>
+                User
+            </a>
+        </div>
+        <h1 id="h"></h1>
+        <main role="main" class="col-10 pt-3 pb-3 px-4 bg-light">
+
+            <div th:replace="tableForUser :: content"></div>
+        </main>
+    </div>
+
+</div>
+</body>
+</html>

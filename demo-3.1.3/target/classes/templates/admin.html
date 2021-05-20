@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Users</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div th:replace="header :: content"></div>
+
+<div class="container-fluid no-gutters">
+    <div class="row ">
+        <div class="col-2 pt-3 pl-0 pr-0">
+            <div class="nav nav-pills bg-white " role="tablist">
+                <button class="text-left nav-link btn btn-block active mb-0" id="mainAdminBtn" data-toggle="pill"
+                        data-target="#mainAdmin"
+                        type="button" role="tab" aria-controls="mainAdmin" aria-selected="true">Admin
+                </button>
+                <button class="text-left nav-link btn btn-block mt-0" id="mainUserBtn" data-toggle="pill"
+                        data-target="#mainUser"
+                        type="button" role="tab" aria-controls="mainUser" aria-selected="false">User
+                </button>
+            </div>
+        </div>
+        <main role="main" class="col-10 pt-3 pb-3 px-4 bg-light">
+            <div class="tab-content" id="main">
+                <div class="tab-pane fade show active" id="mainAdmin" role="tabpanel" aria-labelledby="mainAdminBtn">
+                    <h1 class="mb-4">Admin panel</h1>
+
+                    <ul class="nav nav-pills" id="adminPanel" role="tablist">
+                        <li class="nav-item">
+                            <button class="nav-link btn border-0 active" id="usersTableBtn" data-toggle="pill"
+                                    data-target="#usersTable"
+                                    type="button" role="tab" aria-controls="usersTable" aria-selected="true">Users table
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link btn border-0" id="newUserBtn" data-toggle="pill"
+                                    data-target="#newUser"
+                                    type="button"
+                                    role="tab" aria-controls="newUser" aria-selected="false">New user
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="usersAndNew">
+                        <div class="tab-pane fade show active" id="usersTable" role="tabpanel"
+                             aria-labelledby="usersTableBtn">
+                            <div class="row-cols-auto  bg-white no-gutters">
+                                <div class="col-12 bg-light border">
+                                    <h5 class="pl-3 pt-2 pb-2">All users</h5>
+                                </div>
+                                <div class="col-12 pl-3 pr-3 pt-3 border">
+                                    <table class="table table-striped ">
+                                        <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>First Name</th>
+                                            <th>Last Name</th>
+                                            <th>Email</th>
+                                            <th>Role</th>
+                                            <th>Edit</th>
+                                            <th>Delete</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="usersTableBody">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="newUser" role="tabpanel" aria-labelledby="newUserBtn">
+                            <div th:replace="newUser :: content"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="mainUser" role="tabpanel" aria-labelledby="mainUserBtn">
+                    <div th:replace="tableForUser :: content"></div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+</div>
+
+<div class="modal fade text-center" id="editModal"
+     tabindex="-1"
+     role="dialog"
+     aria-labelledby="editTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content ">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editTitle">Edit
+                    user</h5>
+
+                <button type="button" class="close"
+                        data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center col-12 offset-3 col-md-6 offset-md-3">
+                <div class="form-group">
+                    <label class="font-weight-bold"
+                           for="idEditModal">ID</label>
+                    <input id="idEditModal" class="form-control"
+                           placeholder="Id"
+                           readonly>
+                </div>
+                <div class="form-group text-center">
+                    <label class="font-weight-bold"
+                           for="firstNameEditModal">First
+                        Name</label>
+                    <input id="firstNameEditModal" class="form-control"
+                           placeholder="Name">
+                </div>
+                <div class="form-group text-center">
+                    <label class="font-weight-bold"
+                           for="lastNameEditModal">Last
+                        Name</label>
+                    <input id="lastNameEditModal" class="form-control"
+                           placeholder="Last name">
+                </div>
+                <div class="form-group text-center">
+                    <label class="font-weight-bold"
+                           for="emailEditModal">Email</label>
+                    <input id="emailEditModal" class="form-control"
+                           placeholder="Email">
+                </div>
+                <div class="form-group text-center">
+                    <label class="font-weight-bold"
+                           for="passwordEditModal">Password</label>
+                    <input type="password" id="passwordEditModal"
+                           class="form-control">
+                </div>
+                <div class="form-group text-center">
+                    <label class="font-weight-bold"
+                           for="rolesEditModal">Role</label>
+                    <select multiple class="form-control"
+                            id="rolesEditModal">
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                        data-dismiss="modal">
+                    Close
+                </button>
+                <button id="editUserBtn" type="button" class="btn btn-primary">Edit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteModal"
+     tabindex="-1"
+     role="dialog"
+     aria-labelledby="deleteTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteTitle">Delete
+                    user</h5>
+
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center col-12 offset-3 col-md-6 offset-md-3">
+                <form>
+                    <div class="form-group text-center">
+                        <label class="font-weight-bold"
+                               for="idDelModal">ID</label>
+                        <input id="idDelModal" class="form-control" readonly>
+                    </div>
+                    <div class="form-group text-center">
+                        <label class="font-weight-bold" for="firstNameDelModal">First
+                            Name</label>
+                        <input id="firstNameDelModal" class="form-control" readonly>
+                    </div>
+                    <div class="form-group text-center">
+                        <label class="font-weight-bold" for="lastNameDelModal">Last
+                            Name</label>
+                        <input id="lastNameDelModal" class="form-control" readonly>
+                    </div>
+                    <div class="form-group text-center">
+                        <label class="font-weight-bold"
+                               for="emailDelModal">Email</label>
+                        <input id="emailDelModal" class="form-control" readonly>
+                    </div>
+                    <div class="form-group text-center">
+                        <label class="font-weight-bold"
+                               for="rolesDelModal">Role</label>
+                        <select id="rolesDelModal" multiple disabled class="form-control">
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                        data-dismiss="modal">
+                    Close
+                </button>
+                <button id="delUserBtn" class="btn btn-danger" role="button">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script defer>
+    let allUsers;
+    let allRoles;
+    fetch('/rest/roles').then(
+        res => {
+            res.json().then(
+                roles => {
+                    allRoles = roles;
+                }
+            )
+        }
+    )
+
+    function isHaveUser(email, id) {
+        let result = false;
+        allUsers.forEach(u => {
+            if (u.email == email) {
+                if (u.id != id) {
+                    result = true;
+                    alert("Пользователь с таким email уже существует!!!");
+                }
+            }
+        })
+        return result;
+    }
+
+    fetch('/rest/users').then(
+        res => {
+            res.json().then(
+                data => {
+                    allUsers = data;
+                    createTable(allUsers);
+                }
+            )
+        }
+    )
+
+    function createTable(data) {
+        let temp = "";
+        data.forEach(u => {
+            temp += "<tr id=\"" + u.id + "\">";
+            temp += "<td>" + u.id + "</td>";
+            temp += "<td>" + u.name + "</td>";
+            temp += "<td>" + u.lastName + "</td>";
+            temp += "<td>" + u.email + "</td>";
+            temp += "<td>";
+            let rolesStr = "";
+            u.roles.forEach(r => {
+                rolesStr += r.name + " ";
+            })
+            temp += rolesStr + "</td>";
+            temp += "<td><button class=\"btn btn-info\" onclick=\"fEdit(this)\" id=\"editBtn" + u.id + "\">Edit</button></td>";
+            temp += "<td><button class=\"btn btn-danger\" onclick=\"fDel(this)\" id=\"deleteBtn" + u.id + "\">Delete</button></td>" + "</tr>";
+        })
+        document.getElementById("usersTableBody").innerHTML = temp;
+    }
+
+    $('#addUserBtn').click(function () {
+        let newUser = {
+            name: "",
+            lastName: "",
+            email: "",
+            password: "",
+            roles: []
+        };
+        newUser.email = document.getElementById("emailNew").value;
+        if (!isHaveUser(newUser.email, 0)) {
+            newUser.name = document.getElementById("firstNameNew").value;
+            newUser.lastName = document.getElementById("lastNameNew").value;
+            newUser.password = document.getElementById("passwordNew").value;
+            newUser.roles = [];
+            [].slice.call(document.getElementById("rolesNew")).forEach(op => {
+                if (op.selected) {
+                    allRoles.forEach(r => {
+                        if (r.name == op.text) {
+                            newUser.roles.push(r);
+                        }
+                    })
+                }
+            })
+            fetch('/rest/users', {
+                method: 'POST',
+                Accept: 'application/json, */*; q=0.01',
+                body: JSON.stringify(newUser),
+                headers: {'Content-Type': 'application/json'}
+            }).then(res1 => {
+                if (res1.ok) {
+                    res1.json().then(u => {
+                        allUsers.push(u);
+                        createTable(allUsers);
+                    })
+                    document.getElementById("firstNameNew").value = "";
+                    document.getElementById("lastNameNew").value = "";
+                    document.getElementById("emailNew").value = "";
+                    document.getElementById("passwordNew").value = "";
+                    document.getElementById("rolesNew").selectedIndex = -1;
+                } else {
+                    alert("Не удалось добавить: " + res1.status);
+                }
+            })
+        }
+    })
+
+    function getUserById(id) {
+        let t = null;
+        allUsers.forEach(u => {
+            if (u.id == id) {
+                t = u;
+            }
+        })
+        return t;
+    }
+
+    $('#editUserBtn').click(function () {
+        let edit = {
+            id: -1,
+            name: "",
+            lastName: "",
+            email: "",
+            password: "",
+            roles: []
+        };
+        edit.email = document.getElementById("emailEditModal").value;
+        edit.id = document.getElementById("idEditModal").value;
+        if (!isHaveUser(edit.email, edit.id)) {
+            $('#editModal').modal('hide');
+            edit.name = document.getElementById("firstNameEditModal").value;
+            edit.lastName = document.getElementById("lastNameEditModal").value;
+            edit.password = document.getElementById("passwordEditModal").value;
+            edit.roles = [];
+            [].slice.call(document.getElementById("rolesEditModal")).forEach(op => {
+                if (op.selected) {
+                    allRoles.forEach(r => {
+                        if (r.name == op.text) {
+                            edit.roles.push(r);
+                        }
+                    })
+                }
+            })
+            fetch('/rest/users', {
+                method: 'PUT',
+                body: JSON.stringify(edit),
+                headers: {'Content-Type': 'application/json'}
+            })
+                .then(res => {
+                    if (res.ok) {
+                        allUsers.forEach(u => {
+                            if (u.id == edit.id) {
+                                u.name = edit.name;
+                                u.lastName = edit.lastName;
+                                u.email = edit.email;
+                                if (edit.password !== "") {
+                                    u.password = edit.password;
+                                }
+                                u.roles = edit.roles;
+                            }
+                        })
+                        createTable(allUsers);
+                    }
+                });
+        }
+    })
+
+    $('#delUserBtn').click(function () {
+        let id = document.getElementById("idDelModal").value;
+        $('#deleteModal').modal('hide');
+
+        fetch('/rest/users/' + id, {method: 'DELETE'})
+            .then(res => {
+                if (res.ok) {
+                    document.getElementById(id).remove();
+                    let u = getUserById(id);
+                    let i = allUsers.indexOf(u);
+                    delete allUsers[i];
+                } else {
+                    alert("Удаление не удалось: " + res.status);
+                }
+            });
+    })
+
+    function fEdit(el) {
+        let idStr = el.id;
+        let id = idStr.slice(7);
+        allUsers.forEach(u => {
+            if (u.id == id) {
+                // user1 = u;
+                console.log(u);
+                document.getElementById("idEditModal").value = u.id;
+                document.getElementById("firstNameEditModal").value = u.name;
+                document.getElementById("lastNameEditModal").value = u.lastName;
+                document.getElementById("emailEditModal").value = u.email;
+                document.getElementById("rolesEditModal").size = allRoles.length;
+                let temp = "";
+                allRoles.forEach(r => {
+                    let select = "";
+                    u.roles.forEach(rUser => {
+                        if (rUser.id == r.id) {
+                            select = " selected";
+                        }
+                    })
+                    temp += "<option" + select + ">" + r.name + "</option>";
+                })
+                document.getElementById("rolesEditModal").innerHTML = temp;
+            }
+        });
+        $('#editModal').modal('show');
+    }
+
+    function fDel(el) {
+        let idStr = el.id;
+        let id = idStr.slice(9);
+        allUsers.forEach(u => {
+            if (u.id == id) {
+                document.getElementById("idDelModal").value = u.id;
+                document.getElementById("firstNameDelModal").value = u.name;
+                document.getElementById("lastNameDelModal").value = u.lastName;
+                document.getElementById("emailDelModal").value = u.email;
+                document.getElementById("rolesDelModal").size = u.roles.length.toString();
+                let temp = "";
+                u.roles.forEach(r => {
+                    temp += "<option>" + r.name + "</option>";
+                })
+                document.getElementById("rolesDelModal").innerHTML = temp;
+            }
+        });
+        $('#deleteModal').modal('show');
+    }
+</script>
+
+</body>
+</html>
